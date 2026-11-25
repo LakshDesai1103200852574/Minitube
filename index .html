@@ -1,0 +1,786 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiniTube - Watch Something Amazing</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #0f0f0f;
+    color: white;
+}
+
+/* HEADER */
+header {
+    height: 65px;
+    background: #151515;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: #ff3333;
+    cursor: pointer;
+}
+
+.logo span {
+    color: white;
+}
+
+.search-box {
+    display: flex;
+    width: 45%;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px;
+    background: #222;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 25px 0 0 25px;
+    outline: none;
+}
+
+.search-box button {
+    padding: 0 22px;
+    background: #333;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 0 25px 25px 0;
+    cursor: pointer;
+}
+
+.profile {
+    background: #ff3333;
+    padding: 10px 13px;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+/* MAIN LAYOUT */
+.container {
+    display: flex;
+}
+
+.sidebar {
+    width: 220px;
+    background: #151515;
+    min-height: calc(100vh - 65px);
+    padding: 20px 12px;
+    position: fixed;
+}
+
+.sidebar button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    color: white;
+    border: none;
+    text-align: left;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+    background: #303030;
+}
+
+.sidebar hr {
+    border: 1px solid #333;
+    margin: 15px 0;
+}
+
+main {
+    margin-left: 220px;
+    padding: 25px;
+    width: calc(100% - 220px);
+}
+
+/* CATEGORIES */
+.categories {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    margin-bottom: 25px;
+    padding-bottom: 8px;
+}
+
+.categories button {
+    white-space: nowrap;
+    padding: 10px 18px;
+    background: #292929;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+.categories button:hover,
+.categories button.active {
+    background: white;
+    color: black;
+}
+
+/* VIDEO GRID */
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px 18px;
+}
+
+.video-card {
+    cursor: pointer;
+    min-width: 0;
+}
+
+.thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #252525;
+}
+
+.video-card h3 {
+    font-size: 15px;
+    margin: 10px 0 7px;
+    line-height: 1.4;
+}
+
+.video-card p {
+    color: #aaa;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.video-card:hover .thumbnail {
+    border-radius: 5px;
+}
+
+/* PLAYER */
+.player-section {
+    display: none;
+    max-width: 950px;
+    margin: auto;
+}
+
+.player-section iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    border-radius: 12px;
+}
+
+.player-section h2 {
+    margin: 18px 0;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.actions button {
+    background: #292929;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.actions button:hover {
+    background: #444;
+}
+
+.description {
+    background: #222;
+    padding: 18px;
+    border-radius: 12px;
+    margin-top: 15px;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.back-btn {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+/* STATUS */
+.status {
+    color: #aaa;
+    padding: 20px 0;
+}
+
+footer {
+    text-align: center;
+    color: #777;
+    padding: 30px;
+}
+
+/* RESPONSIVE */
+@media(max-width: 1000px) {
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 650px) {
+    header {
+        padding: 0 12px;
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .search-box {
+        width: 55%;
+    }
+
+    .sidebar {
+        width: 65px;
+        padding: 15px 5px;
+    }
+
+    .sidebar button {
+        font-size: 0;
+        text-align: center;
+        padding: 15px 3px;
+    }
+
+    .sidebar button::first-letter {
+        font-size: 19px;
+    }
+
+    main {
+        margin-left: 65px;
+        width: calc(100% - 65px);
+        padding: 15px 10px;
+    }
+
+    .video-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo" onclick="showHome()">
+        ▶ <span>MINI</span>TUBE
+    </div>
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search videos..."
+            onkeydown="if(event.key==='Enter') searchVideos()"
+        >
+        <button onclick="searchVideos()">🔍</button>
+    </div>
+
+    <div class="profile">M</div>
+</header>
+
+<div class="container">
+
+    <aside class="sidebar">
+        <button class="active" onclick="showHome()">🏠 Home</button>
+        <button onclick="showCategory('Shorts')">⚡ Shorts</button>
+        <button onclick="showSaved()">❤️ Watch Later</button>
+        <button onclick="showHistory()">🕘 History</button>
+
+        <hr>
+
+        <button onclick="showCategory('Music')">🎵 Music</button>
+        <button onclick="showCategory('Gaming')">🎮 Gaming</button>
+        <button onclick="showCategory('Technology')">💻 Technology</button>
+        <button onclick="showCategory('Education')">📚 Education</button>
+
+        <hr>
+
+        <button onclick="showSubscriptions()">📺 Subscriptions</button>
+    </aside>
+
+    <main>
+
+        <section id="homeSection">
+
+            <div class="categories">
+                <button class="active" onclick="showHome()">All</button>
+                <button onclick="showCategory('Music')">Music</button>
+                <button onclick="showCategory('Gaming')">Gaming</button>
+                <button onclick="showCategory('Coding')">Coding</button>
+                <button onclick="showCategory('Technology')">Technology</button>
+                <button onclick="showCategory('Education')">Education</button>
+                <button onclick="showCategory('News')">News</button>
+                <button onclick="showCategory('Sports')">Sports</button>
+            </div>
+
+            <h2 id="pageTitle">Recommended Videos</h2>
+
+            <p class="status" id="status"></p>
+
+            <div class="video-grid" id="videoGrid"></div>
+
+        </section>
+
+        <section class="player-section" id="playerSection">
+
+            <button class="back-btn" onclick="showHome()">
+                ← Back to Home
+            </button>
+
+            <div id="videoPlayer"></div>
+
+            <h2 id="videoTitle"></h2>
+
+            <p id="videoChannel" style="color:#aaa"></p>
+
+            <div class="actions">
+                <button onclick="likeVideo()">👍 Like</button>
+                <button onclick="subscribe()">🔔 Subscribe</button>
+                <button onclick="saveVideo()">❤️ Watch Later</button>
+                <button onclick="shareVideo()">↗ Share</button>
+            </div>
+
+            <div class="description">
+                <h3>Description</h3>
+                <p id="videoDescription">
+                    Welcome to MINITUBE! Enjoy watching your favourite videos.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<footer>
+    © 2026 MINITUBE | Your World of Videos
+</footer>
+
+<script>
+
+/* =================================
+   MINITUBE CONFIGURATION
+================================= */
+
+// Replace this with your NEW restricted API key.
+const API_KEY = "YOUR_NEW_YOUTUBE_API_KEY";
+
+const API_URL = "https://www.googleapis.com/youtube/v3";
+
+let videos = [];
+let currentVideo = null;
+
+let savedVideos = JSON.parse(
+    localStorage.getItem("minitubeSaved") || "[]"
+);
+
+let historyVideos = JSON.parse(
+    localStorage.getItem("minitubeHistory") || "[]"
+);
+
+/* =================================
+   DEMO VIDEOS
+================================= */
+
+const demoVideos = [
+    {
+        id: "jNQXAC9IVRw",
+        title: "Me at the zoo",
+        channel: "Jawed",
+        description: "The first video uploaded to YouTube.",
+        thumbnail: "https://i.ytimg.com/vi/jNQXAC9IVRw/hqdefault.jpg"
+    },
+    {
+        id: "ysz5S6PUM-U",
+        title: "Big Buck Bunny",
+        channel: "Blender",
+        description: "A classic animated short film.",
+        thumbnail: "https://i.ytimg.com/vi/ysz5S6PUM-U/hqdefault.jpg"
+    },
+    {
+        id: "ScMzIvxBSi4",
+        title: "Sample Video",
+        channel: "Demo Channel",
+        description: "Enjoy this sample video.",
+        thumbnail: "https://i.ytimg.com/vi/ScMzIvxBSi4/hqdefault.jpg"
+    },
+    {
+        id: "aqz-KE-bpKQ",
+        title: "Big Buck Bunny - Sample",
+        channel: "Blender",
+        description: "An animated short film.",
+        thumbnail: "https://i.ytimg.com/vi/aqz-KE-bpKQ/hqdefault.jpg"
+    }
+];
+
+/* =================================
+   DISPLAY VIDEOS
+================================= */
+
+function renderVideos(list) {
+
+    const grid = document.getElementById("videoGrid");
+
+    grid.innerHTML = "";
+
+    if (!list.length) {
+        grid.innerHTML = "<p>No videos found.</p>";
+        return;
+    }
+
+    list.forEach(video => {
+
+        const card = document.createElement("div");
+
+        card.className = "video-card";
+
+        const thumbnail = document.createElement("img");
+        thumbnail.className = "thumbnail";
+        thumbnail.src = video.thumbnail;
+        thumbnail.alt = video.title;
+        thumbnail.loading = "lazy";
+
+        const title = document.createElement("h3");
+        title.textContent = video.title;
+
+        const channel = document.createElement("p");
+        channel.textContent = video.channel || "MINITUBE Creator";
+
+        const info = document.createElement("p");
+        info.textContent = "▶ Watch on MINITUBE";
+
+        card.append(thumbnail, title, channel, info);
+
+        card.onclick = () => playVideo(video);
+
+        grid.appendChild(card);
+    });
+
+}
+
+/* =================================
+   HOME PAGE
+================================= */
+
+function showHome() {
+
+    document.getElementById("homeSection").style.display = "block";
+    document.getElementById("playerSection").style.display = "none";
+
+    document.getElementById("pageTitle").textContent =
+        "Recommended Videos";
+
+    document.getElementById("status").textContent = "";
+
+    renderVideos(videos.length ? videos : demoVideos);
+
+}
+
+/* =================================
+   YOUTUBE API SEARCH
+================================= */
+
+async function searchVideos(query) {
+
+    query = query ||
+        document.getElementById("searchInput").value.trim();
+
+    if (!query) return;
+
+    document.getElementById("homeSection").style.display = "block";
+    document.getElementById("playerSection").style.display = "none";
+
+    document.getElementById("pageTitle").textContent =
+        "Search Results: " + query;
+
+    document.getElementById("status").textContent =
+        "Searching videos...";
+
+    if (!API_KEY || API_KEY === "YOUR_NEW_YOUTUBE_API_KEY") {
+
+        const results = demoVideos.filter(video =>
+            video.title.toLowerCase().includes(query.toLowerCase()) ||
+            video.channel.toLowerCase().includes(query.toLowerCase())
+        );
+
+        document.getElementById("status").textContent =
+            "Demo mode: Add your API key to enable real video search.";
+
+        renderVideos(results);
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/search?part=snippet&type=video&maxResults=20&q=${encodeURIComponent(query)}&key=${encodeURIComponent(API_KEY)}`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error?.message || "API request failed");
+        }
+
+        videos = data.items.map(item => ({
+            id: item.id.videoId,
+            title: item.snippet.title,
+            channel: item.snippet.channelTitle,
+            description: item.snippet.description,
+            thumbnail:
+                item.snippet.thumbnails.high?.url ||
+                item.snippet.thumbnails.default.url
+        }));
+
+        document.getElementById("status").textContent =
+            videos.length + " videos found.";
+
+        renderVideos(videos);
+
+    } catch (error) {
+
+        document.getElementById("status").textContent =
+            "API Error: " + error.message;
+
+        renderVideos([]);
+
+    }
+
+}
+
+/* =================================
+   CATEGORY SEARCH
+================================= */
+
+function showCategory(category) {
+
+    if (category === "Shorts") {
+        searchVideos("YouTube Shorts");
+    } else {
+        searchVideos(category);
+    }
+
+}
+
+/* =================================
+   VIDEO PLAYER
+================================= */
+
+function playVideo(video) {
+
+    currentVideo = video;
+
+    document.getElementById("homeSection").style.display = "none";
+
+    document.getElementById("playerSection").style.display = "block";
+
+    document.getElementById("videoTitle").textContent =
+        video.title;
+
+    document.getElementById("videoChannel").textContent =
+        "Channel: " + (video.channel || "MINITUBE Creator");
+
+    document.getElementById("videoDescription").textContent =
+        video.description || "Enjoy watching on MINITUBE.";
+
+    document.getElementById("videoPlayer").innerHTML = "";
+
+    const iframe = document.createElement("iframe");
+
+    iframe.src =
+        "https://www.youtube.com/embed/" +
+        encodeURIComponent(video.id) +
+        "?autoplay=1";
+
+    iframe.title = video.title;
+    iframe.allow =
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.allowFullscreen = true;
+
+    document.getElementById("videoPlayer").appendChild(iframe);
+
+    historyVideos = [
+        video,
+        ...historyVideos.filter(v => v.id !== video.id)
+    ].slice(0, 100);
+
+    localStorage.setItem(
+        "minitubeHistory",
+        JSON.stringify(historyVideos)
+    );
+
+    window.scrollTo(0, 0);
+
+}
+
+/* =================================
+   LIKE FUNCTION
+================================= */
+
+function likeVideo() {
+
+    alert("👍 You liked this video!");
+
+}
+
+/* =================================
+   SUBSCRIBE FUNCTION
+================================= */
+
+function subscribe() {
+
+    alert("🔔 Subscribed successfully! (Demo)");
+
+}
+
+/* =================================
+   WATCH LATER
+================================= */
+
+function saveVideo() {
+
+    if (!currentVideo) return;
+
+    if (savedVideos.some(v => v.id === currentVideo.id)) {
+        alert("Already saved!");
+        return;
+    }
+
+    savedVideos.push(currentVideo);
+
+    localStorage.setItem(
+        "minitubeSaved",
+        JSON.stringify(savedVideos)
+    );
+
+    alert("❤️ Video saved to Watch Later!");
+
+}
+
+function showSaved() {
+
+    document.getElementById("homeSection").style.display = "block";
+    document.getElementById("playerSection").style.display = "none";
+
+    document.getElementById("pageTitle").textContent =
+        "❤️ Watch Later";
+
+    document.getElementById("status").textContent = "";
+
+    renderVideos(savedVideos);
+
+}
+
+/* =================================
+   WATCH HISTORY
+================================= */
+
+function showHistory() {
+
+    document.getElementById("homeSection").style.display = "block";
+    document.getElementById("playerSection").style.display = "none";
+
+    document.getElementById("pageTitle").textContent =
+        "🕘 Watch History";
+
+    document.getElementById("status").textContent = "";
+
+    renderVideos(historyVideos);
+
+}
+
+/* =================================
+   SUBSCRIPTIONS
+================================= */
+
+function showSubscriptions() {
+
+    alert("Subscriptions feature is available in demo mode.");
+
+}
+
+/* =================================
+   SHARE VIDEO
+================================= */
+
+function shareVideo() {
+
+    if (!currentVideo) return;
+
+    const link =
+        "https://www.youtube.com/watch?v=" + currentVideo.id;
+
+    if (navigator.share) {
+
+        navigator.share({
+            title: currentVideo.title,
+            url: link
+        }).catch(() => {});
+
+    } else if (navigator.clipboard) {
+
+        navigator.clipboard.writeText(link)
+            .then(() => alert("Video link copied!"))
+            .catch(() => alert(link));
+
+    } else {
+
+        alert(link);
+
+    }
+
+}
+
+/* =================================
+   INITIALIZE MINITUBE
+================================= */
+
+videos = demoVideos;
+
+showHome();
+
+</script>
+
+</body>
+</html>
